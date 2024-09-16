@@ -1,0 +1,190 @@
+<div class="conatiner-fluid">
+	<div class="d-flex justify-content-between pt-2">
+		<div class="d-flex align-items-center pe-2" style="width:65vw">
+			<div style="width:100%;">
+				<h3 id="selectedDateH2">Выбранный промежуток:
+					{{data.range[0]|date('d.m.Y')}}
+					-
+					{{data.range[1]|date('d.m.Y')}}</h3>
+				<div class="card mt-3" style="margin-bottom:0;">
+					<div class="card-body" style="overflow-x:auto">
+						<table class="table table-sm">
+							<thead >
+								<th class="py-2">Неделя</th>
+								<th class="py-2 t-right">Понедельник</th>
+								<th class="py-2 t-right">Вторник</th>
+								<th class="py-2 t-right">Среда</th>
+								<th class="py-2 t-right">Четверг</th>
+								<th class="py-2 t-right">Пятница</th>
+								<th class="py-2 t-right">Итого</th>
+							</thead>
+							<tbody>
+								{% set total_day = {1: 0, 2: 0, 3: 0, 4: 0, 5: 0} %}
+								
+								{% for key,value in data.data %}
+									{% if value %}
+										<tr>
+											<td class="py-2">
+												{{ key }}
+												неделя
+											</td>
+											{% set total_week = 0 %}
+											{% for i in 1..5 %}
+												<td class="py-2 t-right">
+													{% if value[i] %}
+														<span type="button" data-id="{{value[i].id}}" data-value="{{value[i].value}}" data-porog="{{value[i].minus_delta}}" data-percentage="{{value[i].percentage}}" data-timestamp="{{value[i].timestamp}}" class="{% if value[i]["total"] == 0 %}text-secondary{% elseif value[i]["total"] > 0 %}text-success{% else %}text-danger{% endif %}">{{value[i]["total"]}}
+															₽</span>
+														{% set total_week = total_week+value[i]["total"]%}
+														{% set total_day = total_day|merge({(i):total_day[i]+value[i]["total"]}) %}
+													{% else %}
+														<span class="text-secondary">0 ₽</span>
+													{% endif %}
+												</td>
+											{% endfor %}
+											<td class="py-2 t-right">
+												<span class="{% if total_week == 0 %}text-secondary{% elseif total_week > 0 %}text-success{% else %}text-danger{% endif %}">{{total_week}}
+													₽</span>
+											</td>
+										</tr>
+									{% endif %}
+								{% endfor %}
+							</tbody>
+							<tfoot>
+								<td></td>
+								{% set total = 0 %}
+								{% for i in 1..5 %}
+									<td class="py-2 t-right">
+										<span class="{% if total_day[i] == 0 %}text-secondary{% elseif total_day[i] > 0 %}text-success{% else %}text-danger{% endif %}">{{total_day[i]}}
+											₽</span>
+										{% set total = total+total_day[i]%}
+									</td>
+								{% endfor %}
+								<td class="py-2 t-right">
+									<span class="{% if total == 0 %}text-secondary{% elseif total > 0 %}text-success{% else %}text-danger{% endif %}">{{total}}
+										₽</span>
+								</td>
+							</tfoot>
+						</table>
+
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="d-flex ps-2" style="width:35vw">
+			<div style="width:100%;">
+			<h3 id="selectedDateH2">Текущий баланс: {{data.settings.total}}₽</h3>
+				<div class="card mt-3" style="margin-bottom:0;width:100%;">
+					<div class="card-body"><canvas id="myChart"></canvas></div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="addDay" tabindex="-1" aria-labelledby="addDayLabel" aria-hidden="true">
+	<div class="modal-dialog mt-5">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="addDayLabel">Добавление дня</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="#" id="formAdd">
+				<div class="modal-body">
+					<div class="form-group form-group-alt">
+						<label>Дата</label>
+						<input type="date" name="date" value="{{"now"|date('Y-m-d')}}" class="form-control" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>Сумма</label>
+						<input type="number" name="value" class="form-control" placeholder="Введите значение" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>Просадка</label>
+						<input type="number" name="porog" class="form-control" placeholder="Введите значение" value="{{data.settings.last_porog}}" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>PayOut</label>
+						<input type="number" name="percentage" class="form-control" placeholder="Введите значение без знака %" value="{{data.settings.last_percentage}}" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="editDay" tabindex="-1" aria-labelledby="editDayLabel" aria-hidden="true">
+	<div class="modal-dialog mt-5">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="editDayLabel">Редактирования дня</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="#" id="formEdit">
+				<input type="hidden" name="id">
+				<input type="hidden" name="old_total">
+				<div class="modal-body">
+					<div class="form-group form-group-alt">
+						<label>Дата</label>
+						<input type="date" name="date" value="" class="form-control" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>Сумма</label>
+						<input type="number" name="value" class="form-control" placeholder="Введите значение" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>Просадка</label>
+						<input type="number" name="porog" class="form-control" placeholder="Введите значение" value="" required>
+					</div>
+					<div class="form-group form-group-alt">
+						<label>PayOut</label>
+						<input type="number" name="percentage" class="form-control" placeholder="Введите значение без знака %" value="" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="setBalance" tabindex="-1" aria-labelledby="setBalanceLabel" aria-hidden="true">
+	<div class="modal-dialog mt-5">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="setBalanceLabel">Установите стартовый баланс</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="#" id="formBalance">
+				<div class="modal-body">
+					<div class="form-group form-group-alt">
+						<label>Сумма</label>
+						<input type="number" name="value" class="form-control" placeholder="Введите значение" required>
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
+					<button type="submit" class="btn btn-success">Сохранить</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>
+<div class="modal fade" id="clearBase" tabindex="-1" aria-labelledby="clearBaseLabel" aria-hidden="true">
+	<div class="modal-dialog mt-5">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="clearBaseLabel">Точно очистить базу?</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+			</div>
+			<form action="#" id="formСlearBase">
+				<div class="modal-footer">
+					<button type="button" class="btn btn-success" data-bs-dismiss="modal">Нет я передумал</button>
+					<button type="submit" class="btn btn-danger">ДА</button>
+				</div>
+			</form>
+		</div>
+	</div>
+</div>

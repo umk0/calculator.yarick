@@ -1,0 +1,180 @@
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sdzZCDf9_T_10c3i9MeUcyat4iJY-ERBrE.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sdzZCDf9_T_10c3i9MeUcyat4iJY-2RBrE.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sdzZCDf9_T_10c3i9MeUcyat4iJY9aQxrE.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: italic;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sdzZCDf9_T_10c3i9MeUcyat4iJY9jQxrE.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sfzZCDf9_T_3cV7NCUECyoxNk37cxsBw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sfzZCDf9_T_3cV7NCUECyoxNk338xsBw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sfzZCDf9_T_3cV7NCUECyoxNk3M8tsBw.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arimo';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(https://fonts.gstatic.com/s/arimo/v29/P5sfzZCDf9_T_3cV7NCUECyoxNk3CstsBw.ttf) format('truetype');
+}
+body {
+  border: 0;
+  overflow-y: hidden;
+  padding: 0;
+  margin: 0;
+  background: #dfdbe5;
+  background: url(../assets/img/bg.svg);
+  color: #fff;
+  font-family: "Arimo", sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+}
+#content {
+  margin-top: 40px;
+  padding: 10px 15px;
+  color: #000;
+  overflow-y: auto;
+  min-height: calc(100vh - 39px);
+  max-height: calc(100vh - 40px);
+}
+#titlebar {
+  z-index: 9999;
+  top: 0;
+  display: grid;
+  grid-template-columns: repeat(3);
+  position: fixed;
+  font-weight: 100;
+  height: 32px;
+  width: calc(100% - 9px);
+  background: rgba(23, 23, 26, 0.6);
+  padding: 4px;
+  backdrop-filter: blur(5px);
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+}
+#titlebar * {
+  box-sizing: content-box;
+  -webkit-box-sizing: content-box;
+}
+#titlebar #logo {
+  max-height: 24px;
+}
+#titlebar #drag-region {
+  grid-column: 1;
+  width: 100%;
+  height: 100%;
+  -webkit-app-region: drag;
+}
+#titlebar #window-title {
+  padding-top: 5px;
+  padding-left: 10px;
+  color: #fff;
+}
+#titlebar #buttons {
+  grid-column: 2;
+  -webkit-app-region: drag;
+}
+#titlebar #buttons .btn {
+  -webkit-app-region: no-drag;
+}
+#titlebar #window-controls {
+  grid-column: 3;
+  display: grid;
+  grid-template-columns: repeat(3, 46px);
+  position: absolute;
+  top: 0;
+  right: 0;
+  height: 100%;
+}
+#titlebar #window-controls .button {
+  grid-row: 1 / span 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+#titlebar #min-button {
+  grid-column: 1;
+}
+#titlebar #max-button,
+#titlebar #restore-button {
+  grid-column: 2;
+}
+#titlebar #close-button {
+  grid-column: 3;
+}
+#titlebar #window-controls {
+  -webkit-app-region: no-drag;
+}
+#titlebar #window-controls .button {
+  user-select: none;
+}
+#titlebar .window-hover:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+#titlebar .window-hover:hover:active {
+  background: rgba(255, 255, 255, 0.2);
+}
+#titlebar .window-hover-close:hover {
+  background: #E81123 !important;
+}
+#titlebar .window-hover-close:active {
+  background: #F1707A !important;
+}
+#titlebar .window-hover-close:active .icon {
+  filter: invert(1);
+}
+#titlebar .mac-controls:hover .mac-hover {
+  display: flex;
+}
+#titlebar .mac-hover {
+  display: none;
+}
+.modal {
+  color: #000;
+}
+.card {
+  background-color: rgba(255, 255, 255, 0.6) !important;
+  backdrop-filter: blur(5px);
+}
+.t-right {
+  text-align: right;
+}

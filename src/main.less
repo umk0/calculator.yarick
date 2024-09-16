@@ -1,0 +1,152 @@
+@import url('https://fonts.googleapis.com/css2?family=Arimo:ital,wght@0,400..700;1,400..700&display=swap');
+
+body {
+    border: 0;
+    overflow-y: hidden;
+    padding: 0;
+    margin: 0;
+    background: rgb(223, 219, 229);
+    background: url(./../assets/img/bg.svg);
+    color: #fff;
+    font-family: "Arimo", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+}
+
+#content {
+    margin-top: 40px;
+    padding: 10px 15px;
+    color: #000;
+    overflow-y: auto;
+    min-height: calc(100vh - 39px);
+    max-height: calc(100vh - 40px);
+}
+
+#titlebar {
+    z-index: 9999;
+    top: 0;
+    display: grid;
+    grid-template-columns: repeat(3);
+    position: fixed;
+    font-weight: 100;
+    height: 32px;
+    width: calc(100% - 9px);
+    background: rgba(23, 23, 26, 0.6);
+    padding: 4px;
+    //border-bottom: rgba(255, 255, 255, .2);
+    backdrop-filter: blur(5px);
+    box-sizing: content-box;
+    -webkit-box-sizing: content-box;
+
+    * {
+        box-sizing: content-box;
+        -webkit-box-sizing: content-box;
+    }
+
+    #logo {
+        max-height: 24px;
+    }
+
+    #drag-region {
+        grid-column: 1;
+        width: 100%;
+        height: 100%;
+        -webkit-app-region: drag;
+    }
+
+    #window-title {
+
+        padding-top: 5px;
+        padding-left: 10px;
+        color: #fff;
+    }
+
+    #buttons {
+        grid-column: 2;
+        -webkit-app-region: drag;
+
+        .btn {
+            -webkit-app-region: no-drag;
+        }
+    }
+
+    #window-controls {
+        grid-column: 3;
+        display: grid;
+        grid-template-columns: repeat(3, 46px);
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 100%;
+    }
+
+    #window-controls .button {
+        grid-row: 1 / span 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+    }
+
+    #min-button {
+        grid-column: 1;
+    }
+
+    #max-button,
+    #restore-button {
+        grid-column: 2;
+    }
+
+    #close-button {
+        grid-column: 3;
+    }
+
+    #window-controls {
+        -webkit-app-region: no-drag;
+    }
+
+    #window-controls .button {
+        user-select: none;
+    }
+
+    .window-hover:hover {
+        background: rgba(255, 255, 255, 0.1);
+    }
+
+    .window-hover:hover:active {
+        background: rgba(255, 255, 255, 0.2);
+    }
+
+    .window-hover-close:hover {
+        background: #E81123 !important;
+    }
+
+    .window-hover-close:active {
+        background: #F1707A !important;
+    }
+
+    .window-hover-close:active .icon {
+        filter: invert(1);
+    }
+
+    .mac-controls:hover .mac-hover {
+        display: flex;
+    }
+
+    .mac-hover {
+        display: none;
+    }
+}
+
+.modal {
+    color: #000;
+}
+
+.card {
+    background-color: rgba(255, 255, 255, .6) !important;
+    backdrop-filter: blur(5px);
+}
+.t-right {
+    text-align: right;
+}
